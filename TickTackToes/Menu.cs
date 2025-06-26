@@ -15,6 +15,7 @@ namespace TickTackToes
         public Menu()
         {
             InitializeComponent();
+            this.DoubleBuffered = true; // Включить двойную буферизацию
             ShowMenu();
         }
 
@@ -23,6 +24,8 @@ namespace TickTackToes
             this.Text = "Меню";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackgroundImage = Properties.Resources._8339bec72f606bb96256b486fe867580; // Установка фонового изображения
+            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None; // Убрать рамку окна
 
         }
 
