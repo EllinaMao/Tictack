@@ -19,12 +19,13 @@ namespace TickTackToes
             InitializeComponent();
             this.KeyPreview = true;
             this.KeyDown += TickTackToe_KeyDown;
-            this.FormClosing += TickTackToe_FormClosing;
+            this.FormClosing += ExitButton_Click;
 
             FillArray();
 
             PlayerMessage();
             isSoloGame = GameChoice;//true - solo game, false - multiplayer
+
 
         }
         private void TickTackToe_FormClosing(object sender, FormClosingEventArgs e)
