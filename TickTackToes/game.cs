@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.VisualStyles;
+using System.Windows.Forms;
 
 namespace TickTackToes
 {
@@ -10,6 +11,7 @@ namespace TickTackToes
         private GameLogic logic;
         private bool isSoloGame;
         private bool isGameWon = false;
+        private AIPlayer? aiPlayer;
 
         public TickTackToe(bool GameChoice)
         {
@@ -23,6 +25,11 @@ namespace TickTackToes
             this.FormClosing += ExitButton_Click;
 
             logic = new GameLogic();
+            if (isSoloGame)
+            {
+                aiPlayer = new AIPlayer(logic, !isXTurn);
+            }
+
             UIHelpers.ShowPlayerTurn(isXTurn);
         }
 
@@ -52,6 +59,13 @@ namespace TickTackToes
             isXTurn = new Random().Next(0, 2) == 0;
             logic.Reset();
             isGameWon = false;
+
+            if (isSoloGame)
+            {
+                aiPlayer = new AIPlayer(logic, !isXTurn);
+            }
+
+            UIHelpers.ShowPlayerTurn(isXTurn);
         }
 
         private void MyButton_Click(object sender, EventArgs e)
@@ -69,6 +83,25 @@ namespace TickTackToes
             GameLogic();
 
             isXTurn = !isXTurn;
+
+            if (isSoloGame && !isGameWon && !logic.CheckDraw())
+            {
+                var aiMove = aiPlayer?.GetBestMove();
+                if (aiMove is not null)
+                {
+                    var (aiRow, aiCol) = aiMove.Value;
+                    foreach (Control control in tableLayoutPanel2.Controls)
+                    {
+                        if (control is Button aiBtn &&
+                            tableLayoutPanel2.GetRow(aiBtn) == aiRow &&
+                            tableLayoutPanel2.GetColumn(aiBtn) == aiCol)
+                        {
+                            aiBtn.PerformClick();
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         private void GameLogic()
